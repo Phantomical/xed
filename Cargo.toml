@@ -1,0 +1,11 @@
+[package]
+name = "xed"
+version = "0.1.0"
+authors = ["Phantomical"]
+edition = "2018"
+
+[dependencies]
+xed-sys2 = { path = "../xed-sys" }
+parking_lot = "*"
+num-traits = "*"
+enum-primitive-derive = "*"
