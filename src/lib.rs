@@ -12,4 +12,6 @@ pub use self::enums::*;
 pub use self::funcs::*;
 pub use self::structs::*;
 
+pub use self::init::{init_tables, is_initialized};
+
 pub type Result<T> = std::result::Result<T, Error>;

@@ -1,0 +1,95 @@
+use num_traits::FromPrimitive;
+use xed_sys2::xed_interface::*;
+
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Hash, Primitive)]
+pub enum CpuidBit {
+    AdoxAdcx = XED_CPUID_BIT_ADOXADCX as isize,
+    Aes = XED_CPUID_BIT_AES as isize,
+    Avx = XED_CPUID_BIT_AVX as isize,
+    Avx2 = XED_CPUID_BIT_AVX2 as isize,
+    Avx512Bw = XED_CPUID_BIT_AVX512BW as isize,
+    Avx512Cd = XED_CPUID_BIT_AVX512CD as isize,
+    Avx512Dq = XED_CPUID_BIT_AVX512DQ as isize,
+    Avx512Er = XED_CPUID_BIT_AVX512ER as isize,
+    Avx512F = XED_CPUID_BIT_AVX512F as isize,
+    Avx512Ifma = XED_CPUID_BIT_AVX512IFMA as isize,
+    Avx512Pf = XED_CPUID_BIT_AVX512PF as isize,
+    Avx512Vbmi = XED_CPUID_BIT_AVX512VBMI as isize,
+    Avx512Vl = XED_CPUID_BIT_AVX512VL as isize,
+    Avx512_4FMaps = XED_CPUID_BIT_AVX512_4FMAPS as isize,
+    Avx512_4Vnniw = XED_CPUID_BIT_AVX512_4VNNIW as isize,
+    Avx512BitAlg = XED_CPUID_BIT_AVX512_BITALG as isize,
+    Avx512Vbmi2 = XED_CPUID_BIT_AVX512_VBMI2 as isize,
+    Avx512Vnni = XED_CPUID_BIT_AVX512_VNNI as isize,
+    Avx512VPopcntDq = XED_CPUID_BIT_AVX512_VPOPCNTDQ as isize,
+    Bmi1 = XED_CPUID_BIT_BMI1 as isize,
+    Bmi2 = XED_CPUID_BIT_BMI2 as isize,
+    Cet = XED_CPUID_BIT_CET as isize,
+    ClDemote = XED_CPUID_BIT_CLDEMOTE as isize,
+    ClFlush = XED_CPUID_BIT_CLFLUSH as isize,
+    ClFlushOpt = XED_CPUID_BIT_CLFLUSHOPT as isize,
+    ClWb = XED_CPUID_BIT_CLWB as isize,
+    Cmpxchg16B = XED_CPUID_BIT_CMPXCHG16B as isize,
+    F16C = XED_CPUID_BIT_F16C as isize,
+    Fma = XED_CPUID_BIT_FMA as isize,
+    FxSave = XED_CPUID_BIT_FXSAVE as isize,
+    Gfni = XED_CPUID_BIT_GFNI as isize,
+    Intel64 = XED_CPUID_BIT_INTEL64 as isize,
+    IntelPT = XED_CPUID_BIT_INTELPT as isize,
+    Invalid = XED_CPUID_BIT_INVALID as isize,
+    InvPcid = XED_CPUID_BIT_INVPCID as isize,
+    Lahf = XED_CPUID_BIT_LAHF as isize,
+    Lzcnt = XED_CPUID_BIT_LZCNT as isize,
+    Monitor = XED_CPUID_BIT_MONITOR as isize,
+    MonitorX = XED_CPUID_BIT_MONITORX as isize,
+    MovDir64B = XED_CPUID_BIT_MOVDIR64B as isize,
+    MovDirI = XED_CPUID_BIT_MOVDIRI as isize,
+    MovEbe = XED_CPUID_BIT_MOVEBE as isize,
+    Mpx = XED_CPUID_BIT_MPX as isize,
+    OsPku = XED_CPUID_BIT_OSPKU as isize,
+    OsXSave = XED_CPUID_BIT_OSXSAVE as isize,
+    PclMulQdq = XED_CPUID_BIT_PCLMULQDQ as isize,
+    PConfig = XED_CPUID_BIT_PCONFIG as isize,
+    Pku = XED_CPUID_BIT_PKU as isize,
+    Popcnt = XED_CPUID_BIT_POPCNT as isize,
+    PrefetchW = XED_CPUID_BIT_PREFETCHW as isize,
+    PrefetchWT1 = XED_CPUID_BIT_PREFETCHWT1 as isize,
+    PtWrite = XED_CPUID_BIT_PTWRITE as isize,
+    RdP = XED_CPUID_BIT_RDP as isize,
+    RdRand = XED_CPUID_BIT_RDRAND as isize,
+    RdSeed = XED_CPUID_BIT_RDSEED as isize,
+    RdTscp = XED_CPUID_BIT_RDTSCP as isize,
+    RdWrFsGs = XED_CPUID_BIT_RDWRFSGS as isize,
+    Rtm = XED_CPUID_BIT_RTM as isize,
+    Sgx = XED_CPUID_BIT_SGX as isize,
+    Sha = XED_CPUID_BIT_SHA as isize,
+    SMap = XED_CPUID_BIT_SMAP as isize,
+    Smx = XED_CPUID_BIT_SMX as isize,
+    Sse = XED_CPUID_BIT_SSE as isize,
+    Sse2 = XED_CPUID_BIT_SSE2 as isize,
+    Sse3 = XED_CPUID_BIT_SSE3 as isize,
+    Sse4 = XED_CPUID_BIT_SSE4 as isize,
+    Sse42 = XED_CPUID_BIT_SSE42 as isize,
+    Ssse3 = XED_CPUID_BIT_SSSE3 as isize,
+    Vaes = XED_CPUID_BIT_VAES as isize,
+    Vmx = XED_CPUID_BIT_VMX as isize,
+    VPclMulQdq = XED_CPUID_BIT_VPCLMULQDQ as isize,
+    WaitPkg = XED_CPUID_BIT_WAITPKG as isize,
+    WbNoInvD = XED_CPUID_BIT_WBNOINVD as isize,
+    XSave = XED_CPUID_BIT_XSAVE as isize,
+    XSaveC = XED_CPUID_BIT_XSAVEC as isize,
+    XSaveOpt = XED_CPUID_BIT_XSAVEOPT as isize,
+    XSaveS = XED_CPUID_BIT_XSAVES as isize,
+}
+
+impl From<xed_cpuid_bit_enum_t> for CpuidBit {
+    fn from(x: xed_cpuid_bit_enum_t) -> CpuidBit {
+        Self::from_u32(x).unwrap_or(CpuidBit::Invalid)
+    }
+}
+
+impl From<CpuidBit> for xed_cpuid_bit_enum_t {
+    fn from(x: CpuidBit) -> Self {
+        x as Self
+    }
+}
