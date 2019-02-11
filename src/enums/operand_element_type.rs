@@ -1,6 +1,5 @@
-
-use xed_sys2::xed_interface::*;
 use num_traits::FromPrimitive;
+use xed_sys2::xed_interface::*;
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, Primitive)]
 pub enum OperandElementType {

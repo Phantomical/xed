@@ -4,8 +4,22 @@ version = "0.1.0"
 authors = ["Phantomical"]
 edition = "2018"
 
+[features]
+default = [
+    "mpx",
+    "cet",
+    "encoder",
+    "decoder"
+]
+
+mpx = []
+cet = []
+encoder = []
+decoder = []
+
 [dependencies]
 xed-sys2 = { path = "../xed-sys" }
 parking_lot = "*"
 num-traits = "*"
 enum-primitive-derive = "*"
+static_assertions = "*"
