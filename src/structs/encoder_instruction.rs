@@ -29,9 +29,8 @@ impl EncoderInstruction {
     pub fn effective_address_width(&self) -> u32 {
         self.inner.effective_address_width
     }
-    #[deprecated(note="TODO: Wrap xed_encoder_prefixes_t")]
-    pub fn prefixes(&self) -> xed_encoder_prefixes_t {
-        self.inner.prefixes
+    pub fn prefixes(&self) -> EncoderPrefixes {
+        self.inner.prefixes.into()
     }
 
     pub fn operands(&self) -> &[EncoderOperand] {
@@ -64,9 +63,8 @@ impl EncoderInstruction {
     pub fn set_effective_address_width(&mut self, effective_address_width: u32) {
         self.inner.effective_address_width = effective_address_width;
     }
-    #[deprecated(note="TODO: Wrap xed_encoder_prefixes_t")]
-    pub fn set_prefixes(&mut self, prefixes: xed_encoder_prefixes_t) {
-        self.inner.prefixes = prefixes;
+    pub fn set_prefixes(&mut self, prefixes: EncoderPrefixes) {
+        self.inner.prefixes = prefixes.into_inner();
     }
 
     /// Specify an effective address size different than the default.

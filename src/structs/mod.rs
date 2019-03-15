@@ -11,6 +11,7 @@ mod memop;
 mod operand;
 mod simple_flag;
 mod state;
+mod encoder_prefixes;
 
 pub use self::attributes::*;
 pub use self::chip_features::*;
@@ -25,5 +26,6 @@ pub use self::memop::*;
 pub use self::operand::*;
 pub use self::simple_flag::*;
 pub use self::state::*;
+pub use self::encoder_prefixes::*;
 
 pub type EncDisplacement = xed_sys2::xed_interface::xed_enc_displacement_t;
