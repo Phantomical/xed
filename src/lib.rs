@@ -9,11 +9,13 @@ mod funcs;
 mod init;
 mod structs;
 mod util;
+mod traits;
 
 pub use self::builders::*;
 pub use self::enums::*;
 pub use self::funcs::*;
 pub use self::structs::*;
+pub use self::traits::*;
 
 pub use self::init::{init_tables, is_initialized};
 

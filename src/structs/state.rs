@@ -86,6 +86,15 @@ impl State {
     }
 }
 
+impl InnerPtr<xed_state_t> for State {
+    fn inner_ptr(&self) -> *const xed_state_t {
+        &self.inner as *const _
+    }
+    fn inner_ptr_mut(&mut self) -> *mut xed_state_t {
+        &mut self.inner as *mut _
+    }
+}
+
 impl Default for State {
     fn default() -> Self {
         Self::zeroed()

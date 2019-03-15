@@ -3,7 +3,7 @@ use xed_sys2::xed_interface::*;
 
 use crate::*;
 
-#[repr(C)]
+#[repr(transparent)]
 #[derive(Copy, Clone, Debug)]
 pub struct DecodedInst {
     inner: xed_decoded_inst_t,
@@ -12,12 +12,15 @@ pub struct DecodedInst {
 assert_eq_size!(decoded_inst; DecodedInst, xed_decoded_inst_t);
 
 impl DecodedInst {
-    fn inner_ptr(&self) -> *const xed_decoded_inst_t {
-        &self.inner as *const _
+    pub fn inner(&self) -> &xed_decoded_inst_t {
+        &self.inner 
+    }
+    pub fn inner_mut(&mut self) -> &mut xed_decoded_inst_t {
+        &mut self.inner
     }
 
-    fn inner_ptr_mut(&mut self) -> *mut xed_decoded_inst_t {
-        &mut self.inner as *mut _
+    pub fn into_inner(self) -> xed_decoded_inst_t {
+        self.inner
     }
 }
 
@@ -299,7 +302,7 @@ impl DecodedInst {
         unsafe { xed_decoded_inst_operand_element_type(self.inner_ptr(), operand_index).into() }
     }
 
-    pub fn operands(&self) -> &[DecodedInst] {
+    pub fn operands(&self) -> &[impl OperandValues] {
         use std::slice;
 
         unsafe {
@@ -310,14 +313,14 @@ impl DecodedInst {
         }
     }
 
-    pub fn operands_mut(&mut self) -> &[DecodedInst] {
+    pub fn operands_mut(&mut self) -> &mut [impl OperandValues] {
         use std::slice;
 
         unsafe {
             let nops = self.noperands() as usize;
             let ptr = xed_decoded_inst_operands(&mut self.inner as *mut _) as *mut DecodedInst;
 
-            slice::from_raw_parts(ptr, nops)
+            slice::from_raw_parts_mut(ptr, nops)
         }
     }
 
@@ -432,7 +435,19 @@ impl DecodedInst {
     }
 }
 
-// xed_operand_values_*
+impl InnerPtr<xed_decoded_inst_t> for DecodedInst {
+    fn inner_ptr(&self) -> *const xed_decoded_inst_t {
+        &self.inner as *const _
+    }
+
+    fn inner_ptr_mut(&mut self) -> *mut xed_decoded_inst_t {
+        &mut self.inner as *mut _
+    }
+}
+
+impl OperandValues for DecodedInst {
+
+}
 
 impl From<xed_decoded_inst_t> for DecodedInst {
     fn from(inner: xed_decoded_inst_t) -> Self {

@@ -1,6 +1,8 @@
 use num_traits::FromPrimitive;
 use xed_sys2::xed_interface::*;
 
+use crate::Inst;
+
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash, Primitive)]
 pub enum Exception {
     Avx512E1 = XED_EXCEPTION_AVX512_E1 as isize,
@@ -53,6 +55,12 @@ pub enum Exception {
     SseType4M = XED_EXCEPTION_SSE_TYPE_4M as isize,
     SseType5 = XED_EXCEPTION_SSE_TYPE_5 as isize,
     SseType7 = XED_EXCEPTION_SSE_TYPE_7 as isize,
+}
+
+impl From<&'_ Inst> for Exception {
+    fn from(x: &Inst) -> Self {
+        unsafe { xed_inst_exception(x.inner_ptr()).into() }
+    }
 }
 
 impl From<xed_exception_enum_t> for Exception {

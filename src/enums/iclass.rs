@@ -1577,6 +1577,50 @@ pub enum IClass {
     XTEST = XED_ICLASS_XTEST as isize,
 }
 
+impl IClass {
+    /// Return the corresponding `IClass` without the REP prefix.
+    /// 
+    /// The return value differs from other functions in this
+    /// group: if the input class does not have a 
+    /// REP/REPNE/REPE prefix, the function returns the original
+    /// instruction.
+    pub fn without_rep(self) -> Self {
+        unsafe {
+            xed_rep_remove(self.into()).into()
+        }
+    }
+
+    /// Return the corresponding `IClass` with a REP prefix.
+    /// 
+    /// If the input instruction cannot have a REP prefix,
+    /// this function returns `None`
+    pub fn with_rep(self) -> Option<Self> {
+        unsafe {
+            Self::from_u32(xed_rep_map(self.into()))
+        }
+    }
+
+    /// Return the corresponding `IClass` with a REPE prefix.
+    /// 
+    /// If the input instruction cannot have a REPE prefix,
+    /// this function returns `None`. 
+    pub fn with_repe(self) -> Option<Self> {
+        unsafe {
+            Self::from_u32(xed_repe_map(self.into()))
+        }
+    }
+
+    /// Return the corresponding `IClass` with a REPE prefix. 
+    /// 
+    /// If the input instruction cannot have a REPE prefix,
+    /// this function returns `None`. 
+    pub fn with_repne(self) -> Option<Self> {
+        unsafe {
+            Self::from_u32(xed_repne_map(self.into()))
+        }
+    }
+}
+
 impl From<xed_iclass_enum_t> for IClass {
     fn from(x: xed_iclass_enum_t) -> Self {
         Self::from_u32(x).unwrap_or(IClass::Invalid)

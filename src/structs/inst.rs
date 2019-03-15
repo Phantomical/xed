@@ -7,8 +7,19 @@ pub struct Inst {
 }
 
 impl Inst {
-    fn inner_ptr(&self) -> *const xed_inst_t {
-        &self.inner as *const _
+    pub fn inner_ptr(&self) -> *const xed_inst_t {
+        self.inner() as *const _
+    }
+    
+    pub fn inner(&self) -> &xed_inst_t {
+        &self.inner
+    }
+    pub fn inner_mut(&mut self) -> &mut xed_inst_t {
+        &mut self.inner
+    }
+
+    pub fn into_inner(self) -> xed_inst_t {
+        self.inner
     }
 }
 
