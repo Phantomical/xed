@@ -1,5 +1,6 @@
 #![allow(non_camel_case_types)]
 
+use crate::*;
 use num_traits::FromPrimitive;
 use xed_sys2::xed_interface::*;
 
@@ -1579,45 +1580,58 @@ pub enum IClass {
 
 impl IClass {
     /// Return the corresponding `IClass` without the REP prefix.
-    /// 
+    ///
     /// The return value differs from other functions in this
-    /// group: if the input class does not have a 
+    /// group: if the input class does not have a
     /// REP/REPNE/REPE prefix, the function returns the original
     /// instruction.
     pub fn without_rep(self) -> Self {
-        unsafe {
-            xed_rep_remove(self.into()).into()
-        }
+        unsafe { xed_rep_remove(self.into()).into() }
     }
 
     /// Return the corresponding `IClass` with a REP prefix.
-    /// 
+    ///
     /// If the input instruction cannot have a REP prefix,
     /// this function returns `None`
     pub fn with_rep(self) -> Option<Self> {
-        unsafe {
-            Self::from_u32(xed_rep_map(self.into()))
-        }
+        unsafe { Self::from_u32(xed_rep_map(self.into())) }
     }
 
     /// Return the corresponding `IClass` with a REPE prefix.
-    /// 
+    ///
     /// If the input instruction cannot have a REPE prefix,
-    /// this function returns `None`. 
+    /// this function returns `None`.
     pub fn with_repe(self) -> Option<Self> {
-        unsafe {
-            Self::from_u32(xed_repe_map(self.into()))
-        }
+        unsafe { Self::from_u32(xed_repe_map(self.into())) }
     }
 
-    /// Return the corresponding `IClass` with a REPE prefix. 
-    /// 
+    /// Return the corresponding `IClass` with a REPE prefix.
+    ///
     /// If the input instruction cannot have a REPE prefix,
-    /// this function returns `None`. 
+    /// this function returns `None`.
     pub fn with_repne(self) -> Option<Self> {
-        unsafe {
-            Self::from_u32(xed_repne_map(self.into()))
-        }
+        unsafe { Self::from_u32(xed_repne_map(self.into())) }
+    }
+
+    /// The first [`IForm`](crate::IForm) for this particular iclass.
+    ///
+    /// This function returns valid data as soon as the global
+    /// data is initialized. (This function does not require a
+    /// decoded instruction as input).
+    ///
+    /// This will return invalid data if
+    /// [`init_tables()`](crate::init_tables) has not been called.
+    pub fn first_iform(self) -> IForm {
+        unsafe { xed_iform_first_per_iclass(self.into()).into() }
+    }
+
+    /// Return the maximum number of iforms for this `IClass`.
+    ///
+    /// This function will return invalid data if
+    /// [`init_tables()`](crate::init_tables) has not been
+    /// called.
+    pub fn num_iforms(self) -> u32 {
+        unsafe { xed_iform_max_per_iclass(self.into()) }
     }
 }
 

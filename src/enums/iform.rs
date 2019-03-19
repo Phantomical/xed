@@ -1,6 +1,8 @@
 #![allow(non_camel_case_types)]
 
+use crate::*;
 use num_traits::FromPrimitive;
+use std::os::raw::c_char;
 use xed_sys2::xed_interface::*;
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash, Primitive)]
@@ -8937,6 +8939,89 @@ pub enum IForm {
     XSAVE_MEMmxsave = XED_IFORM_XSAVE_MEMmxsave as isize,
     XSETBV = XED_IFORM_XSETBV as isize,
     XTEST = XED_IFORM_XTEST as isize,
+}
+
+impl IForm {
+    /// Get the `IFormInfo` for this `IForm`.
+    ///
+    /// This will return invalid data if
+    /// [`init_tables()`](crate::init_tables)
+    /// has not been called.
+    pub fn info(self) -> Option<IFormInfo> {
+        unsafe {
+            let ptr = xed_iform_map(self.into());
+
+            if ptr.is_null() {
+                None
+            } else {
+                // This pointer cast is OK since IFormInfo is
+                // repr(transparent)
+                Some(*(ptr as *const IFormInfo))
+            }
+        }
+    }
+
+    /// Get the category for this `IForm`.
+    ///
+    /// This function will return invalid data if
+    /// [`init_tables()`](crate::init_tables)
+    /// has not been called.
+    pub fn category(self) -> Category {
+        unsafe { xed_iform_to_category(self.into()).into() }
+    }
+
+    /// Get the extension for this `IForm`.
+    ///
+    /// This function will return invalid data if
+    /// [`init_tables()`](crate::init_tables)
+    /// has not been called.
+    pub fn extension(self) -> Extension {
+        unsafe { xed_iform_to_extension(self.into()).into() }
+    }
+
+    /// Get the iclass for this `IForm`.
+    ///
+    /// This function will return invalid data if
+    /// [`init_tables()`](crate::init_tables)
+    /// has not been called.
+    pub fn iclass(self) -> IClass {
+        unsafe { xed_iform_to_iclass(self.into()).into() }
+    }
+
+    /// Get the pointer to a character string of the iform.
+    ///
+    /// This translates the internal disambiguated names to the
+    /// more ambiguous names that people like to see. This returns
+    /// the ATT SYSV-syntax name.
+    ///
+    /// This function will return invalid data if
+    /// [`init_tables()`](crate::init_tables)
+    /// has not been called.
+    pub fn string_att(self) -> *const c_char {
+        unsafe { xed_iform_to_iclass_string_att(self.into()) }
+    }
+
+    /// Get the pointer to a character string of the iform.
+    ///
+    /// This translates the internal disambiguated names to the
+    /// more ambiguous names that people like to see. This returns
+    /// the Intel-syntax name.
+    ///
+    /// This function will return invalid data if
+    /// [`init_tables()`](crate::init_tables)
+    /// has not been called.
+    pub fn string_intel(self) -> *const c_char {
+        unsafe { xed_iform_to_iclass_string_att(self.into()) }
+    }
+
+    /// Get the ISA set for the iform.
+    ///
+    /// This function will return invalid data if
+    /// [`init_tables()`](crate::init_tables)
+    /// has not been called.
+    pub fn isa_set(self) -> IsaSet {
+        unsafe { xed_iform_to_isa_set(self.into()).into() }
+    }
 }
 
 impl From<xed_iform_enum_t> for IForm {

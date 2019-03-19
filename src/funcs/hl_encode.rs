@@ -1,9 +1,9 @@
 use crate::*;
-use xed_sys2::xed_interface::*;
 use smallvec::SmallVec;
+use xed_sys2::xed_interface::*;
 
 /// Create a memory displacement
-/// 
+///
 /// # Parameters
 /// - `displacement`: The value of the displacement
 /// - `displacement_bits`: The width of the displacement in bits.
@@ -13,43 +13,39 @@ pub fn disp(displacement: u64, displacement_bits: u32) -> EncDisplacement {
 }
 
 /// A first immediate operand (known as IMM0)
-/// 
+///
 /// # Parameters
 /// - `v`: An immediate operand.
 /// - `width_bits`: The immediate width in bits.
 pub fn imm0(v: u64, width_bits: u32) -> EncoderOperand {
-    unsafe {
-        xed_imm0(v, width_bits).into()
-    }
+    unsafe { xed_imm0(v, width_bits).into() }
 }
 
 /// The 2nd immedate operand (known as IMM1) for rare
-/// instructions that require it. 
-/// 
+/// instructions that require it.
+///
 /// # Parameters
-/// - `v`: The 2nd immediate (byte-width) operand. 
+/// - `v`: The 2nd immediate (byte-width) operand.
 pub fn imm1(v: u8) -> EncoderOperand {
-    unsafe {
-        xed_imm1(v).into()
-    }
+    unsafe { xed_imm1(v).into() }
 }
 
-/// Instruction with an array of operands. 
-/// 
+/// Instruction with an array of operands.
+///
 /// The maximum number is `XED_ENCODER_OPERANDS_MAX`. The
-/// array's contents are copied. 
-/// 
+/// array's contents are copied.
+///
 /// # Parameters
 /// - `mode`: The `State` included the machine mode
 ///   and stack address width.
-/// - `iclass`: The `IClass`. 
-/// - `effective_operand_width`: In bits. 
-/// - `operand_array`: An array of `EncoderOperand` objects. 
+/// - `iclass`: The `IClass`.
+/// - `effective_operand_width`: In bits.
+/// - `operand_array`: An array of `EncoderOperand` objects.
 pub fn inst(
     mode: State,
     iclass: IClass,
     effective_operand_width: u32,
-    operands: &[EncoderOperand]
+    operands: &[EncoderOperand],
 ) -> EncoderInstruction {
     unsafe {
         let mut val: xed_encoder_instruction_t = std::mem::uninitialized();
@@ -66,7 +62,7 @@ pub fn inst(
             iclass.into(),
             effective_operand_width,
             operands.len() as u32,
-            args.as_ptr()
+            args.as_ptr(),
         );
 
         val.into()
@@ -74,16 +70,12 @@ pub fn inst(
 }
 
 /// Instruction with no operands.
-/// 
+///
 /// # Parameters
 /// - `mode`: The [`State`](crate::State) to be filled in.
 /// - `iclass`: The [`IClass`](crate::IClass).
-/// - `effective_operand_width`: In bits. 
-pub fn inst0(
-    mode: State,
-    iclass: IClass,
-    effective_operand_width: u32
-) -> EncoderInstruction {
+/// - `effective_operand_width`: In bits.
+pub fn inst0(mode: State, iclass: IClass, effective_operand_width: u32) -> EncoderInstruction {
     unsafe {
         let mut val: xed_encoder_instruction_t = std::mem::uninitialized();
 
@@ -91,7 +83,7 @@ pub fn inst0(
             &mut val as &mut _,
             mode.into_inner(),
             iclass.into(),
-            effective_operand_width
+            effective_operand_width,
         );
 
         val.into()
@@ -99,11 +91,11 @@ pub fn inst0(
 }
 
 /// Instruction with one operand.
-/// 
+///
 /// # Parameters
 /// - `mode`: The [`State`](crate::State) to be filled in.
 /// - `iclass`: The [`IClass`](crate::IClass).
-/// - `effective_operand_width`: In bits. 
+/// - `effective_operand_width`: In bits.
 /// - `op0`: The operand.
 pub fn inst1(
     mode: State,
@@ -127,11 +119,11 @@ pub fn inst1(
 }
 
 /// Instruction with two operands.
-/// 
+///
 /// # Parameters
 /// - `mode`: The [`State`](crate::State) to be filled in.
 /// - `iclass`: The [`IClass`](crate::IClass).
-/// - `effective_operand_width`: In bits. 
+/// - `effective_operand_width`: In bits.
 /// - `op0`: The 1st operand.
 /// - `op1`: The 2nd operand.
 pub fn inst2(
@@ -158,11 +150,11 @@ pub fn inst2(
 }
 
 /// Instruction with three operands.
-/// 
+///
 /// # Parameters
 /// - `mode`: The [`State`](crate::State) to be filled in.
 /// - `iclass`: The [`IClass`](crate::IClass).
-/// - `effective_operand_width`: In bits. 
+/// - `effective_operand_width`: In bits.
 /// - `op0`: The 1st operand.
 /// - `op1`: The 2nd operand.
 /// - `op2`: The 3rd operand.
@@ -192,11 +184,11 @@ pub fn inst3(
 }
 
 /// Instruction with four operands.
-/// 
+///
 /// # Parameters
 /// - `mode`: The [`State`](crate::State) to be filled in.
 /// - `iclass`: The [`IClass`](crate::IClass).
-/// - `effective_operand_width`: In bits. 
+/// - `effective_operand_width`: In bits.
 /// - `op0`: The 1st operand.
 /// - `op1`: The 2nd operand.
 /// - `op2`: The 3rd operand.
@@ -229,11 +221,11 @@ pub fn inst4(
 }
 
 /// Instruction with five operands.
-/// 
+///
 /// # Parameters
 /// - `mode`: The [`State`](crate::State) to be filled in.
 /// - `iclass`: The [`IClass`](crate::IClass).
-/// - `effective_operand_width`: In bits. 
+/// - `effective_operand_width`: In bits.
 /// - `op0`: The 1st operand.
 /// - `op1`: The 2nd operand.
 /// - `op2`: The 3rd operand.

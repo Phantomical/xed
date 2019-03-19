@@ -10,7 +10,7 @@ impl Inst {
     pub fn inner_ptr(&self) -> *const xed_inst_t {
         self.inner() as *const _
     }
-    
+
     pub fn inner(&self) -> &xed_inst_t {
         &self.inner
     }

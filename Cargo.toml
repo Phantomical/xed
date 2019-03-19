@@ -9,8 +9,11 @@ default = [
     "mpx",
     "cet",
     "encoder",
-    "decoder"
+    "decoder",
+    "auto-ctor"
 ]
+
+auto-ctor = []
 
 mpx = []
 cet = []
@@ -24,3 +27,5 @@ num-traits = "*"
 enum-primitive-derive = "*"
 static_assertions = "*"
 smallvec = "*"
+ctor = "*"
+libc = "*"

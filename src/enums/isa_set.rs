@@ -1,3 +1,4 @@
+use crate::*;
 use num_traits::FromPrimitive;
 use xed_sys2::xed_interface::*;
 
@@ -147,6 +148,18 @@ pub enum IsaSet {
     XSaveC = XED_ISA_SET_XSAVEC as isize,
     XSaveOpt = XED_ISA_SET_XSAVEOPT as isize,
     XSaveS = XED_ISA_SET_XSAVES as isize,
+}
+
+impl IsaSet {
+    /// Returns whether the isa_set is par included in the
+    /// specified chip.
+    ///
+    /// Every Intel XED iform belongs to one [`IsaSet`](crate::IsaSet).
+    /// Each Intel XED chip of type [`Chip`](crate::Chip) represents
+    /// a collection of xed "isa-sets".
+    pub fn valid_for_chip(self, chip: Chip) -> bool {
+        unsafe { xed_isa_set_is_valid_for_chip(self.into(), chip.into()) != 0 }
+    }
 }
 
 impl From<xed_isa_set_enum_t> for IsaSet {

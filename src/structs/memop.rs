@@ -1,10 +1,9 @@
-
 use crate::*;
 use xed_sys2::xed_interface::*;
 
 #[derive(Copy, Clone, Debug)]
 pub struct MemOp {
-    inner: xed_memop_t
+    inner: xed_memop_t,
 }
 
 impl MemOp {
@@ -45,6 +44,6 @@ impl MemOp {
 
 impl From<xed_memop_t> for MemOp {
     fn from(x: xed_memop_t) -> Self {
-        Self { inner: x}
+        Self { inner: x }
     }
 }

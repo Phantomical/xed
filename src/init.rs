@@ -1,4 +1,4 @@
-use parking_lot::{Once, OnceState, ONCE_INIT};
+use parking_lot::{Once, ONCE_INIT};
 use xed_sys2::xed_interface::*;
 
 static TABLES_INIT: Once = ONCE_INIT;
@@ -12,8 +12,4 @@ pub fn init_tables() {
     TABLES_INIT.call_once(|| unsafe {
         xed_tables_init();
     });
-}
-
-pub fn is_initialized() -> bool {
-    TABLES_INIT.state() == OnceState::Done
 }

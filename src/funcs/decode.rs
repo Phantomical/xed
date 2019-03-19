@@ -1,19 +1,18 @@
-
-use crate::{Error, DecodedInst, ChipFeatures};
+use crate::{ChipFeatures, DecodedInst, Error};
 use xed_sys2::xed_interface::*;
 
 use std::mem;
 
 /// This is the main interface to the decoder.
-/// 
+///
 /// # Parameters
 /// - `itext`: The slice of instruction text bytes. 1 to 15 bytes,
-///            anything more is ignored. 
-/// 
+///            anything more is ignored.
+///
 /// # Returns
 /// A result indicating success or failure. Note failure can be
 /// due to not enough bytes in the input array.
-/// 
+///
 /// The maximum instruction is 15B and XED will tell you how long
 /// the instruction actually is if you call `DecodedInst::get_length()`.
 /// However, it is not always safe or advisable for XED to read 15
@@ -31,11 +30,7 @@ pub fn decode(itext: &[u8]) -> Result<DecodedInst, Error> {
     unsafe {
         let mut inst: xed_decoded_inst_t = mem::zeroed();
 
-        let res = xed_decode(
-            &mut inst as *mut _,
-            itext.as_ptr(),
-            itext.len() as u32,
-        );
+        let res = xed_decode(&mut inst as *mut _, itext.as_ptr(), itext.len() as u32);
 
         if res != XED_ERROR_NONE {
             return Err(res.into());
@@ -46,12 +41,15 @@ pub fn decode(itext: &[u8]) -> Result<DecodedInst, Error> {
 }
 
 /// Similar to `xed_decode()`.
-/// 
-/// This version of the decode API adds a CPUID feature vector to 
+///
+/// This version of the decode API adds a CPUID feature vector to
 /// support restricting decode based on both a specified chip via
 /// `DecodedInst::set_input_chip()` and a modify-able cpuid vector
 /// obtained via `ChipFeatures::new()`.
-pub fn decode_with_features(itext: &[u8], features: &mut ChipFeatures) -> Result<DecodedInst, Error> {
+pub fn decode_with_features(
+    itext: &[u8],
+    features: &mut ChipFeatures,
+) -> Result<DecodedInst, Error> {
     unsafe {
         let mut inst: xed_decoded_inst_t = mem::zeroed();
 
@@ -69,5 +67,3 @@ pub fn decode_with_features(itext: &[u8], features: &mut ChipFeatures) -> Result
         Ok(inst.into())
     }
 }
-
-

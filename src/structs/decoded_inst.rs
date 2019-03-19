@@ -13,7 +13,7 @@ assert_eq_size!(decoded_inst; DecodedInst, xed_decoded_inst_t);
 
 impl DecodedInst {
     pub fn inner(&self) -> &xed_decoded_inst_t {
-        &self.inner 
+        &self.inner
     }
     pub fn inner_mut(&mut self) -> &mut xed_decoded_inst_t {
         &mut self.inner
@@ -445,9 +445,7 @@ impl InnerPtr<xed_decoded_inst_t> for DecodedInst {
     }
 }
 
-impl OperandValues for DecodedInst {
-
-}
+impl OperandValues for DecodedInst {}
 
 impl From<xed_decoded_inst_t> for DecodedInst {
     fn from(inner: xed_decoded_inst_t) -> Self {

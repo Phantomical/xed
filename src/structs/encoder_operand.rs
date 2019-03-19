@@ -3,7 +3,7 @@ use xed_sys2::xed_interface::*;
 #[derive(Copy, Clone, Debug)]
 #[repr(transparent)]
 pub struct EncoderOperand {
-    inner: xed_encoder_operand_t
+    inner: xed_encoder_operand_t,
 }
 
 impl EncoderOperand {
